@@ -6,7 +6,7 @@
             "id": "f4cef57e-dd0f-4614-911c-138733304843",
             "actions": [
                 {
-                    "name": "Fire Bullet",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "53862042-7acc-4b8c-bd5a-0456e8f6888e",
                     "expectedControlType": "Button",
@@ -15,7 +15,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Fire Explosive",
+                    "name": "SecondaryAttack",
                     "type": "Button",
                     "id": "21231e79-86c9-4494-8a27-f2c379c3734c",
                     "expectedControlType": "Button",
@@ -31,6 +31,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Melee Weapon",
+                    "type": "Button",
+                    "id": "99034575-e2eb-4452-acac-c32609513ba3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Rifle Weapon",
+                    "type": "Button",
+                    "id": "9652ba3a-9989-410f-afb6-6cdf092bec01",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -41,7 +59,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire Bullet",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -52,7 +70,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Fire Explosive",
+                    "action": "SecondaryAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -110,6 +128,28 @@
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7e6f55ad-956c-4c66-a0be-4060cc442e22",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Melee Weapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7971d997-e884-4e8f-b777-b65eecbf4d47",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Rifle Weapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

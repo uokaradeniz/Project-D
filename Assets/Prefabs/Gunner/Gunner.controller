@@ -33,7 +33,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Walker
+  m_Name: Gunner
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: IsAttacking
@@ -62,7 +62,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AttackWalker
+  m_Name: AttackGunner
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -76,7 +76,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d43e4e3f79961db4f8a1df693b8f1fcf, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0323847cc4ca82b42a59b90876bd15b4, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

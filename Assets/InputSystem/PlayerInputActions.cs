@@ -28,7 +28,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
             ""id"": ""f4cef57e-dd0f-4614-911c-138733304843"",
             ""actions"": [
                 {
-                    ""name"": ""Fire Bullet"",
+                    ""name"": ""Attack"",
                     ""type"": ""Button"",
                     ""id"": ""53862042-7acc-4b8c-bd5a-0456e8f6888e"",
                     ""expectedControlType"": ""Button"",
@@ -37,7 +37,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Fire Explosive"",
+                    ""name"": ""SecondaryAttack"",
                     ""type"": ""Button"",
                     ""id"": ""21231e79-86c9-4494-8a27-f2c379c3734c"",
                     ""expectedControlType"": ""Button"",
@@ -53,6 +53,24 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Melee Weapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""99034575-e2eb-4452-acac-c32609513ba3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rifle Weapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""9652ba3a-9989-410f-afb6-6cdf092bec01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -63,7 +81,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Fire Bullet"",
+                    ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -74,7 +92,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Fire Explosive"",
+                    ""action"": ""SecondaryAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -132,6 +150,28 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e6f55ad-956c-4c66-a0be-4060cc442e22"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Melee Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7971d997-e884-4e8f-b777-b65eecbf4d47"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rifle Weapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -140,9 +180,11 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_FireBullet = m_Player.FindAction("Fire Bullet", throwIfNotFound: true);
-        m_Player_FireExplosive = m_Player.FindAction("Fire Explosive", throwIfNotFound: true);
+        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_SecondaryAttack = m_Player.FindAction("SecondaryAttack", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        m_Player_MeleeWeapon = m_Player.FindAction("Melee Weapon", throwIfNotFound: true);
+        m_Player_RifleWeapon = m_Player.FindAction("Rifle Weapon", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -202,16 +244,20 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_FireBullet;
-    private readonly InputAction m_Player_FireExplosive;
+    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_SecondaryAttack;
     private readonly InputAction m_Player_Movement;
+    private readonly InputAction m_Player_MeleeWeapon;
+    private readonly InputAction m_Player_RifleWeapon;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @FireBullet => m_Wrapper.m_Player_FireBullet;
-        public InputAction @FireExplosive => m_Wrapper.m_Player_FireExplosive;
+        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @SecondaryAttack => m_Wrapper.m_Player_SecondaryAttack;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
+        public InputAction @MeleeWeapon => m_Wrapper.m_Player_MeleeWeapon;
+        public InputAction @RifleWeapon => m_Wrapper.m_Player_RifleWeapon;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -221,36 +267,50 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
             {
-                @FireBullet.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireBullet;
-                @FireBullet.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireBullet;
-                @FireBullet.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireBullet;
-                @FireExplosive.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireExplosive;
-                @FireExplosive.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireExplosive;
-                @FireExplosive.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFireExplosive;
+                @Attack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAttack;
+                @SecondaryAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAttack;
+                @SecondaryAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAttack;
+                @SecondaryAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAttack;
                 @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                @MeleeWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeWeapon;
+                @MeleeWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeWeapon;
+                @MeleeWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeWeapon;
+                @RifleWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRifleWeapon;
+                @RifleWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRifleWeapon;
+                @RifleWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRifleWeapon;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @FireBullet.started += instance.OnFireBullet;
-                @FireBullet.performed += instance.OnFireBullet;
-                @FireBullet.canceled += instance.OnFireBullet;
-                @FireExplosive.started += instance.OnFireExplosive;
-                @FireExplosive.performed += instance.OnFireExplosive;
-                @FireExplosive.canceled += instance.OnFireExplosive;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+                @SecondaryAttack.started += instance.OnSecondaryAttack;
+                @SecondaryAttack.performed += instance.OnSecondaryAttack;
+                @SecondaryAttack.canceled += instance.OnSecondaryAttack;
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @MeleeWeapon.started += instance.OnMeleeWeapon;
+                @MeleeWeapon.performed += instance.OnMeleeWeapon;
+                @MeleeWeapon.canceled += instance.OnMeleeWeapon;
+                @RifleWeapon.started += instance.OnRifleWeapon;
+                @RifleWeapon.performed += instance.OnRifleWeapon;
+                @RifleWeapon.canceled += instance.OnRifleWeapon;
             }
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
     public interface IPlayerActions
     {
-        void OnFireBullet(InputAction.CallbackContext context);
-        void OnFireExplosive(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnSecondaryAttack(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnMeleeWeapon(InputAction.CallbackContext context);
+        void OnRifleWeapon(InputAction.CallbackContext context);
     }
 }

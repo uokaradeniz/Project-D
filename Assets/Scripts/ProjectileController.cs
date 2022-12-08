@@ -29,7 +29,9 @@ public class ProjectileController : MonoBehaviour
 
     private void Start()
     {
-        Physics.IgnoreLayerCollision(3,6);
+        Physics.IgnoreLayerCollision(3, 6);
+        Physics.IgnoreLayerCollision(6, 6);
+        
         rb = GetComponent<Rigidbody>();
         if (projectileType == ProjectileType.Bullet)
         {
@@ -68,6 +70,7 @@ public class ProjectileController : MonoBehaviour
                     if (obj.CompareTag("Enemy"))
                         obj.GetComponent<EnemyController>().health -= Random.Range(40, 60);
                 }
+
                 Invoke("ApplyExplosionEffect", .05f);
             }
         }
@@ -82,20 +85,38 @@ public class ProjectileController : MonoBehaviour
                 piece.GetComponent<Rigidbody>()
                     .AddExplosionForce(explosionForce, transform.position, explosionRadii, 5);
         }
+
         Instantiate(particleDestroyVFX, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.collider.CompareTag("Player") && !collision.collider.CompareTag("Projectile") &&
-            projectileType == ProjectileType.Bullet)
+        if (gameObject.CompareTag("Projectile"))
         {
-            Instantiate(particleDestroyVFX, transform.position, Quaternion.identity);
-            if (collision.collider.CompareTag("Enemy"))
+            if (!collision.collider.CompareTag("Player") && !collision.collider.CompareTag("Projectile") &&
+                projectileType == ProjectileType.Bullet)
             {
-                collision.collider.GetComponent<EnemyController>().health -= Random.Range(10, 20);
+                if (collision.collider.CompareTag("Enemy"))
+                {
+                    collision.collider.GetComponent<EnemyController>().health -= Random.Range(10, 20);
+                }
             }
-
+            Instantiate(particleDestroyVFX, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
+        else if (gameObject.CompareTag("EnemyProjectile"))
+        {
+            if (!collision.collider.CompareTag("Enemy") && !collision.collider.CompareTag("Projectile") &&
+                projectileType == ProjectileType.Bullet)
+            {
+                if (collision.collider.CompareTag("Player"))
+                {
+                    collision.collider.GetComponent<PlayerCombatController>().health -=
+                        (int)Random.Range(EnemyController.DAMAGE_MIN, EnemyController.DAMAGE_MAX);
+                } 
+            }
+            Instantiate(particleDestroyVFX, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }
