@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mono.Cecil;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,11 +21,8 @@ public class GameController : MonoBehaviour
     public float yPos;
     public bool spawnEnemies;
     [SerializeField]private float spawnDelay;
-    private Transform spawnPoint1;
-    private Transform spawnPoint2;
-    private Transform spawnPoint3;
-    private Transform spawnPoint4;
-    private List<Transform> spList = new List<Transform>();
+    
+    private List<GameObject> spList = new List<GameObject>();
 
     public float Score
     {
@@ -35,14 +33,8 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        spawnPoint1 = Camera.main.transform.Find("SpawnPoint1");
-        spawnPoint2 = Camera.main.transform.Find("SpawnPoint2");
-        spawnPoint3 = Camera.main.transform.Find("SpawnPoint3");
-        spawnPoint4 = Camera.main.transform.Find("SpawnPoint4");
-        spList.Add(spawnPoint1);
-        spList.Add(spawnPoint2);
-        spList.Add(spawnPoint3);
-        spList.Add(spawnPoint4);
+        foreach (var sp in GameObject.FindGameObjectsWithTag("SpawnPoint"))
+            spList.Add(sp);
         
         scoreText = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
         scoreAdditionText = GameObject.Find("ScoreAdditionText").GetComponent<TextMeshProUGUI>();
@@ -67,10 +59,12 @@ public class GameController : MonoBehaviour
         spawnTimer += Time.deltaTime;
         if (spawnTimer >= spawnDelay)
         {
-            //var spawnPos = Camera.main.ViewportToWorldPoint(new Vector3(1, yPos, 1));
             foreach (var sp in spList)
-                Instantiate(Resources.Load("Walker"), sp.position, Quaternion.identity);    
-            
+            {
+                Instantiate(Resources.Load("Walker"), sp.transform.position, Quaternion.identity);
+                Instantiate(Resources.Load("SpawnVFX"), sp.transform.position + new Vector3(0,1,0), Quaternion.identity);
+            }
+
             spawnTimer = 0;
         }
     }
